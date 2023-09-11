@@ -5,12 +5,11 @@ gc()
 set.seed(1954)
 
 # adjust to your setting
-.libPaths("~/Rlib/")
-setwd("~/Desktop/Teaching/Stan-tutorial-Lueven/scripts")
+#.libPaths("~/Rlib/")
+path <- "Lueven_summer_school2023/scripts"
 
 
 library(outbreaks)
-library(ggplot2)
 
 library(rjson)
 library(bayesplot)
@@ -19,7 +18,7 @@ library(cmdstanr)
 library(loo)
 library(tidyverse)
 
-source("tools_is.r")
+source(file.path(getwd(), path, "tools_is.r"))
 
 mc.cores = 4
 
@@ -28,16 +27,16 @@ mc.cores = 4
 
 # plot the data, obtained from outbreaks
 theme_set(theme_bw())
-ggplot(data = influenza_england_1978_school) + 
-  geom_point(mapping = aes(x = date, y = in_bed)) + 
+ggplot(data = influenza_england_1978_school) +
+  geom_point(mapping = aes(x = date, y = in_bed)) +
   labs(y = "Number of students in bed")
 
 # create a data list to be passed to Stan
 cases <- influenza_england_1978_school$in_bed
 N <- 763;
-n_days <- length(cases) 
+n_days <- length(cases)
 t <- seq(0, n_days, by = 1)
-t0 = 0 
+t0 = 0
 t <- t[-1]
 
 #initial conditions
@@ -60,7 +59,7 @@ init <- function() {
 }
 
 # transpile (translate Stan to C++ and then compile)
-mod <- cmdstan_model("model/sir.stan")
+mod <- cmdstan_model(file.path(getwd(), path, "model/sir.stan"))
 
 n_chains <- 4
 fit <- mod$sample(data = data_sir,
@@ -83,15 +82,15 @@ bayesplot::mcmc_dens_overlay(fit$draws(), pars = pars)
 pred_cases <- as.matrix(
   as_draws_df(fit$draws(variables = c("pred_cases"))))[, -(15:17)]
 
-bayesplot::ppc_ribbon(y = data_sir$cases, yrep = pred_cases, 
-                      x = data_sir$ts, y_draw = "point") + 
+bayesplot::ppc_ribbon(y = data_sir$cases, yrep = pred_cases,
+                      x = data_sir$ts, y_draw = "point") +
   theme_bw() +
   ylab("cases") + xlab("days")
 
 #####################################################################
 ## Run same model with a Poisson likelihood
 
-mod <- cmdstan_model("model/sir_poisson.stan")
+mod <- cmdstan_model(file.path(getwd(), path, "model/sir_poisson.stan"))
 
 fit_poisson <- mod$sample(data = data_sir,
                           chains = n_chains,
@@ -104,8 +103,8 @@ fit_poisson$summary(variables = pars)
 pred_cases_poisson <- as.matrix(
   as_draws_df(fit_poisson$draws(variables = c("pred_cases"))))[, -(15:17)]
 
-bayesplot::ppc_ribbon(y = data_sir$cases, yrep = pred_cases_poisson, 
-                      x = data_sir$ts, y_draw = "point") + 
+bayesplot::ppc_ribbon(y = data_sir$cases, yrep = pred_cases_poisson,
+                      x = data_sir$ts, y_draw = "point") +
   theme_bw() +
   ylab("cases") + xlab("days")
 
