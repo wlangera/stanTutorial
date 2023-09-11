@@ -126,7 +126,7 @@ print(loo_estimate)
 #####################################################################
 ## run SIR model with custom tolerance for the ODE solver
 
-mod <- cmdstan_model("model/sir_tol.stan")
+mod <- cmdstan_model(file.path(getwd(), path, "model/sir_tol.stan"))
 
 tol <- 5e-1
 data_sir$tol <- tol
