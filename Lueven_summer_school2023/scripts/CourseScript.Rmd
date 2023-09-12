@@ -235,8 +235,8 @@ loo_estimate <- loo(log_lik_draws, r_eff = relative_eff(log_lik_draws))
 
 
 log_lik_draws_poisson <- fit_poisson$draws("log_lik")
-loo_estimate_poisson <-
-  loo(log_lik_draws_poisson, r_eff = relative_eff(log_lik_draws_poisson))
+loo_estimate_poisson <- loo(log_lik_draws_poisson,
+                            r_eff = relative_eff(log_lik_draws_poisson))
 
 print(loo_estimate_poisson)
 print(loo_estimate)
