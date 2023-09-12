@@ -244,10 +244,9 @@ print(loo_estimate)
 
 ```{r}
 ## run SIR model with custom tolerance for the ODE solver
-
 mod <- cmdstan_model("model/sir_tol.stan")
 
-tol <- 1e-4
+tol <- 1e-12
 data_sir$tol <- tol
 fit_tol <- mod$sample(data = data_sir,
                       chains = n_chains,
@@ -257,6 +256,7 @@ fit_tol <- mod$sample(data = data_sir,
 ```
 
 ```{r}
+fit$time()
 fit_tol$time()
 ```
 
