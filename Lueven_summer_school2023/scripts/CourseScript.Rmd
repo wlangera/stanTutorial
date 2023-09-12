@@ -292,8 +292,8 @@ stan_data <- list(n_schools = n_schools,
 ```
 
 ```{r}
-mod <- cmdstan_model("model/8schools.stan")
-# other models: 8schools_nc, 8schools_marginal
+mod <- cmdstan_model("model/8schools_nc.stan")
+# other models: 8schools, 8schools_marginal
 
 fit <- mod$sample(data = stan_data,
                   chains = 4, parallel_chains = detectCores(),
@@ -302,6 +302,12 @@ fit <- mod$sample(data = stan_data,
                   # adapt_delta = 0.8,
                   seed = 1234)
 ```
+
+8schools.stan:
+Warning: 32 of 4000 (1.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.
+
+Non-centered gives no warnings.
 
 ```{r}
 fit$summary()
