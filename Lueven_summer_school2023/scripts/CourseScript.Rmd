@@ -404,6 +404,12 @@ init <- function() {
 ```
 
 ```{r}
+source("set_tbb.r")
+## If running on windows, this can be used for debugging purposes.
+if (FALSE) {
+  set_tbb(cmdstan_path, "model")
+}
+
 model_name <- "twoCpt_ode"
 mod <- cmdstan_model(paste0("model/", model_name, ".stan"))
 ```
@@ -418,7 +424,12 @@ fit <- mod$sample(data = data, chains = n_chains, init = init,
 ```{r}
 # Save fit (useful for expensive models!)
 system("mkdir deliv")
-fit$save_object(paste0("deliv/", model_name, ".fit.RDS"))
+file <- paste0("deliv/", model_name, ".fit.RDS")
+if (file.exists(file)) {
+  fit <- readRDS(file)
+} else {
+  fit$save_object(file)
+}
 ```
 
 ```{r}
