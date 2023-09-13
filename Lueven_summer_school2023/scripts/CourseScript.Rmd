@@ -292,8 +292,8 @@ stan_data <- list(n_schools = n_schools,
 ```
 
 ```{r}
-mod <- cmdstan_model("model/8schools_nc.stan")
-# other models: 8schools, 8schools_marginal
+mod <- cmdstan_model("model/8schools_marginal2.stan")
+# other models: 8schools, 8schools_nc
 
 fit <- mod$sample(data = stan_data,
                   chains = 4, parallel_chains = detectCores(),
