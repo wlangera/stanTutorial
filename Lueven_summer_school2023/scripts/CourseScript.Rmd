@@ -357,6 +357,7 @@ system("git clone https://github.com/metrumresearchgroup/Torsten.git")
 ```
 
 To build the Stan binaries with `Torsten`, we can open a shell window (bottom left icon on Colab) and type the following commands:
+
 ```
 cd Torsten/cmdstan
 make examples/TwoCptModelPopulation/TwoCptModelPopulation
